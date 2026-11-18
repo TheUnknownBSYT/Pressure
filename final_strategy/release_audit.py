@@ -193,7 +193,7 @@ def check_player(pid, role, cells, report, all_high, draws, match_index, checked
         [report.absolute, report.ordinary, report.uplift, report.positive_own_share,
          report.positive_both_share, report.pressure_coverage, report.pressure_legal,
          report.ordinary_legal, report.pressure_matches, report.ordinary_matches], atol=1e-10)
-    eligible = support and absolute > 0 and absolute > ordinary
+    eligible = support and absolute > 0 and absolute > ordinary and own_share > .5
     assert eligible == bool(report.eligible), (role, pid)
     if not eligible:
         return support

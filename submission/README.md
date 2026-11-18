@@ -8,9 +8,4 @@ Upload [SupeRR_Selector_Final_Methodology.pdf](SupeRR_Selector_Final_Methodology
 
 The CSVs give the exact dataset spelling and player ID. If Unstop displays a variant of a name, use the CSV and methodology as the reference for the intended player.
 
-## Evidence
-
-- [Candidate figures](evidence/candidate_metrics.csv) cover the selections and comparison candidates. Quality, ordinary, uplift and rating use run equivalents per six legal balls. Positive values favor the named player in either role. Match shares run from zero to one. Empty fields indicate unavailable estimates.
-- [Frequency alternatives](evidence/reliability_frequency.csv), [single-match deletion](evidence/reliability_deletion.csv), [eligibility sensitivity](evidence/rating_gate_sensitivity.csv) and [paired rank uncertainty](evidence/rating_adjacent.csv) show where the order depends on the definition of reliability.
-- [Pressure illustration](evidence/consequence_scenarios.png) and [uncertainty chart](evidence/rating_uncertainty.png) accompany the methodology. The CSVs in this directory also include model calibration, feature removal tests, forward results and international-to-IPL transfer.
-- [Verification and test results](evidence/verification.md) and [file hashes](evidence/verification.json) identify the checked build. [Local reproduction instructions](../README.md) list the inputs and commands.
+The [compact ranking CSV](round_one_rankings.csv) includes pressure samples, weighted success, conservative scores and uplift. The methodology includes the separate auction shortlist and official availability sources. The evidence directory is the archived pre-majority release.

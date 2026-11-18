@@ -156,8 +156,11 @@ def estimate_player(frame, as_of, mids, counts, *, half_life=None):
     row["uncertainty_scope"] = "conditional on recorded matches, fitted models and retained cells"
     row["selection_reason"] = ("nonpositive absolute pressure contribution" if q <= 0 else
                                "nonpositive uplift over matched ordinary" if q <= baseline else
+                               "weighted success at or below 50%" if frac <= .5 else
                                "outside top ten on conservative absolute quality")
-    return row, ord_map, (q_draw, delta)
+    wins = rate[None, :] > ordinary_draw @ mix.T
+    majority = ((draw_weight * weight) * wins).sum(axis=1) > .5 * mass
+    return row, ord_map, (q_draw, delta, majority)
 
 
 def position(values, mask, absolute=None):
@@ -178,11 +181,11 @@ def evaluate_sample(groups, as_of, *, half_life=None, draws=N_BOOT, stability=Fa
         if vals is not None:
             boot[pid] = vals
     result = pd.DataFrame(rows).set_index("player_id")
-    for c in ("rating", "absolute", "ordinary", "uplift", "binary_vote"):
+    for c in ("rating", "absolute", "ordinary", "uplift", "binary_vote", "positive_own_share"):
         if c not in result:
             result[c] = np.nan
     supported = result.supported
-    qualifies = supported & (result.absolute > 0) & (result.uplift > 0)
+    qualifies = supported & (result.absolute > 0) & (result.uplift > 0) & (result.positive_own_share > .5)
     result["eligible"] = qualifies
     result["rank"] = position(result.rating, qualifies, result.absolute)
     result["absolute_rank"] = position(result.absolute, qualifies)
@@ -194,8 +197,8 @@ def evaluate_sample(groups, as_of, *, half_life=None, draws=N_BOOT, stability=Fa
     if stability and boot:
         # Rank the bootstrapped point quality subject to resampled gates. Separately
         # recomputing a nested-bootstrap lower bound is not part of this diagnostic.
-        scores = pd.DataFrame({p: np.where((a > 0) & (u > 0), a, np.nan)
-                               for p, (a, u) in boot.items()})
+        scores = pd.DataFrame({p: np.where((a > 0) & (u > 0) & majority, a, np.nan)
+                               for p, (a, u, majority) in boot.items()})
         r = scores.rank(axis=1, ascending=False, method="first")
         result["resample_top10_fraction_point_rule"] = r.le(10).mean()
         result["resample_positive_both_fraction"] = scores.notna().mean()
@@ -429,7 +432,7 @@ def run():
     for role, group in full.groupby("role"):
         supported = group.set_index("player_id").query("supported")
         for kind, keep in (
-            ("point gates", supported.eligible),
+            ("point gates", supported.absolute.gt(0) & supported.uplift.gt(0)),
             ("majority above own ordinary", supported.eligible & (supported.positive_own_share > .5)),
             ("one-sided 80% lower limits positive", (supported.rating > 0) & (supported.uplift_lower80 > 0)),
             ("two-sided 95% lower limits positive", (supported.absolute_lo95 > 0) & (supported.uplift_lo95 > 0))):

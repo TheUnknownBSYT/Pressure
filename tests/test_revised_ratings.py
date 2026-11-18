@@ -43,3 +43,14 @@ def test_strictly_positive_uplift_and_tie_resolution():
     s = pd.Series([2,2,2], index=pd.Index([3,2,1],name="player_id"))
     absolute = pd.Series([4,3,3], index=s.index)
     assert position(s,s.notna(),absolute).index.tolist() == [3,1,2]
+
+
+def test_strict_weighted_majority():
+    frame = role_scores()
+    frame.loc[frame.high.eq(1) & frame.match_id.le(6), "value"] = 0
+    exact, _ = evaluate_sample(frame, frame.date.max(), draws=100)
+    assert exact.loc[101, "positive_own_share"] == .5
+    assert exact.loc[101, "uplift"] > 0 and not exact.loc[101, "eligible"]
+    frame.loc[frame.high.eq(1) & frame.match_id.eq(1), "legal"] = 3
+    above, _ = evaluate_sample(frame, frame.date.max(), draws=100)
+    assert above.loc[101, "eligible"]

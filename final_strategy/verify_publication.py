@@ -47,7 +47,7 @@ def main():
         ranked=pd.read_csv(FINAL/f'final_{label}_top10.csv')
         assert ranked['rank'].tolist()==list(range(1,11)) and ranked.player_id.is_unique
         verified=candidates.loc[(candidates.role==role)&candidates.supported&
-                                candidates.absolute.gt(0)&candidates.uplift.gt(0)].sort_values(
+                                candidates.absolute.gt(0)&candidates.uplift.gt(0)&candidates.positive_own_share.gt(.5)].sort_values(
             ['rating','absolute','player_id'],ascending=[False,False,True]).head(10)
         assert verified.player_id.tolist()==ranked.player_id.tolist()
         subset=selected.loc[selected.role.eq(role)].sort_values('rank')

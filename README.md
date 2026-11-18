@@ -20,7 +20,7 @@ I estimate runs and dismissal or wicket probabilities for comparable balls. The 
 
 Batters gain credit for scoring above expectation and avoiding dismissals. Bowlers gain credit for conceding fewer runs and taking wickets above expectation. I put the contributions on the same scale, runs of value per six legal balls.
 
-A player needs positive value against comparable players and improvement over their own ordinary deliveries in the same innings, phase and competition. I require enough matched balls and appearances before ranking anyone. An appearance of fewer than six pressure balls gets proportionally less weight. I repeatedly resample whole matches and rank eligible players by the 20th percentile of their estimated pressure contribution. This favors players whose value holds up across different mixes of matches.
+A player needs positive value against comparable players and improvement over their own ordinary deliveries in the same innings, phase and competition. Strictly more than half of weighted pressure appearances must beat the player’s own matched ordinary benchmark. I require enough matched balls and appearances before ranking anyone. An appearance of fewer than six pressure balls gets proportionally less weight. I repeatedly resample whole matches and rank eligible players by the 20th percentile of their estimated pressure contribution. This favors players whose value holds up across different mixes of matches.
 
 ## What changed after testing
 
@@ -30,48 +30,21 @@ I also checked whether rankings made from earlier seasons predicted later result
 
 ## Run it locally
 
-Use Python 3.14. Put these six competition CSVs in the repository root: `ball_by_ball.csv`, `matches.csv`, `competitions.csv`, `teams.csv`, `playing_eleven.csv` and `competition_team_player_mapping.csv`. The competition data and generated submission files are excluded from this repository.
+Use Python 3.14. Put these six competition CSVs in the repository root: `ball_by_ball.csv`, `matches.csv`, `competitions.csv`, `teams.csv`, `playing_eleven.csv` and `competition_team_player_mapping.csv`. Keep these proprietary inputs and all match-level outputs local. Only summary selections and documentation belong in the release.
 
 ```bash
 python3.14 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python build_submission.py --through transfer
+python build_submission.py --through response
+python -m final_strategy.round_one
 python -m pytest -q
 ```
 
-The build reconstructs the matches, tests pressure definitions, fits player expectations, generates rankings and checks how results transfer between competitions. The numerical results and logs go under `outputs/`. Some regression tests are designed for archived local builds and skip when those files are absent.
+If the original response and pressure artifacts already exist locally, start at the second command. The exporter recomputes both complete pools, checks names against official IDs, and writes the two dropdown lists and the compact [20-player CSV](submission/round_one_rankings.csv). Private full-pool diagnostics stay under ignored `outputs/`.
 
-For the full local publishing workflow, install LibreOffice and Poppler and make sure `soffice` and `pdftotext` are on your PATH. Then run:
+## Round 1 submission
 
-```bash
-python -m pip install -r requirements-documents.txt
-python build_submission.py --from-stage audit
-```
+The [report](submission/SupeRR_Selector_Final_Methodology.md) gives the approved formula, all ranks and IDs, the chronological validation and the separate auction screen. The [PDF](submission/SupeRR_Selector_Final_Methodology.pdf) is the upload copy. Availability was checked on 18 November 2026. Refresh it against the official auction list before bidding.
 
-## Where the implementation lives
-
-- `pressure_pipeline/` and `build_pressure_dataset.py` rebuild matches and score deliveries.
-- `final_strategy/consequence.py` tests the pressure definition and its alternatives.
-- `final_strategy/response_model.py` estimates expected runs and wickets.
-- `final_strategy/ratings.py` compares players with their peers and their own ordinary performances.
-- `final_strategy/transfer.py` checks whether earlier international performance carries over to the IPL.
-- `build_submission.py` runs the stages in order.
-
-## Round 1 release
-
-The supplied fixtures span **22 January 2022 to 1 November 2026**. Raw files record 200,999 deliveries, with 113,031 receiving a pressure score.
-
-
-```text
-Competition files
-    → Match state before each ball
-    → Pressure score and historical cutoff
-    → Runs and wickets above comparable expectations
-    → Personal ordinary baseline and eligibility
-    → Match resampling and ordered lists
-```
-
-On the matched 2026 forward sample, correlations with later pressure quality were 0.064 for 22 batters and 0.265 for 29 bowlers. Every adjacent 95% interval for the difference in pressure quality included zero. Nine selections lacked matched IPL pressure balls. Ranking by the frequency of beating a personal ordinary benchmark kept six of the ten selections in each role. The release keeps the conservative average because it credits the size of contributions. The methodology explains where that choice matters.
-
-The `audit` stage independently checks match state, pressure thresholds, model forecasts, eligibility and rankings from local data. See [verification and reproduction](submission/evidence/verification.md). Both ordered lists are ready to enter into Unstop, and the PDF is the separate upload.
+The underlying pressure and response implementations are unchanged. The supplementary files under `submission/evidence/` document the previous release and use its eligibility rule where applicable.
