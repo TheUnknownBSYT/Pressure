@@ -53,3 +53,24 @@ python build_submission.py --from-stage publication
 - `final_strategy/ratings.py` compares players with their peers and their own ordinary performances.
 - `final_strategy/transfer.py` checks whether earlier international performance carries over to the IPL.
 - `build_submission.py` runs the stages in order.
+
+## Round 1 release
+
+The supplied fixtures span **22 January 2022 to 1 November 2026**. Raw files record 200,999 deliveries, with 113,031 receiving a pressure score.
+
+- [Methodology PDF](submission/SupeRR_Selector_Final_Methodology.pdf)
+- [Batting order](submission/final_batters_top10.csv) and [bowling order](submission/final_bowlers_top10.csv)
+- [Submission instructions and evidence](submission/README.md)
+
+```text
+Competition files
+    → Match state before each ball
+    → Pressure score and historical cutoff
+    → Runs and wickets above comparable expectations
+    → Personal ordinary baseline and eligibility
+    → Match resampling and ordered lists
+```
+
+On the matched 2026 forward sample, correlations with later pressure quality were 0.064 for 22 batters and 0.265 for 29 bowlers. Every adjacent 95% interval for the difference in pressure quality included zero. Nine selections lacked matched IPL pressure balls. Ranking by the frequency of beating a personal ordinary benchmark kept six of the ten selections in each role. The release keeps the conservative average because it credits the size of contributions. The methodology explains where that choice matters.
+
+The `audit` stage independently checks match state, pressure thresholds, model forecasts, eligibility and rankings from local data. See [verification and reproduction](submission/evidence/verification.md). Both ordered lists are ready to enter into Unstop, and the PDF is the separate upload.

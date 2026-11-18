@@ -7,7 +7,12 @@
 /competition_team_player_mapping.csv
 /teams.csv
 /competitions.csv
-/*.pdf
+**/*.pdf
+!/submission/SupeRR_Selector_Final_Methodology.pdf
 __pycache__/
 .pytest_cache/
 .DS_Store
+
+*.parquet
+.env
+.env.*

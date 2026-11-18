@@ -40,6 +40,8 @@ def main():
     content=json.loads((E/'report_content.json').read_text())
     assert len(pages)==len(content),(len(pages),len(content))
     md=BASE.with_suffix('.md').read_text()
+    release=json.loads((E/'release_audit.json').read_text())
+    assert release['raw_delivery_rows_reconciled']==manifest['rows']
     checks={}
     for i,(role,label) in enumerate([('bat','batters'),('bowl','bowlers')]):
         ranked=pd.read_csv(FINAL/f'final_{label}_top10.csv')
@@ -51,15 +53,19 @@ def main():
         subset=selected.loc[selected.role.eq(role)].sort_values('rank')
         assert subset.player_id.tolist()==ranked.player_id.tolist()
         assert np.allclose(subset.absolute-subset.ordinary,subset.uplift)
-        assert (subset.pressure_coverage>=.75).all() and (subset.pressure_matches>=8).all()
+        assert subset.pressure_coverage.ge(.75).all()
+        assert subset.pressure_matches.ge(8).all() and subset.ordinary_matches.ge(8).all()
+        assert subset.pressure_legal.ge(50).all() and subset.ordinary_legal.ge(100).all()
+        assert subset.absolute.gt(0).all() and subset.uplift.gt(0).all()
         assert np.array_equal(subset.IPL_legal+subset.T20I_legal,subset.pressure_legal)
         assert np.array_equal(subset.middle_legal+subset.death_legal+subset.powerplay_legal,subset.pressure_legal)
         tbl=tables[i].findall('w:tr',NS)[1:]
         assert len(tbl)==10
-        for row,wr in zip(ranked.itertuples(),tbl):
-            key=[str(row.rank),row.player_name,str(row.player_id)]
+        for row, wr, metrics in zip(ranked.itertuples(), tbl, subset.itertuples(), strict=True):
+            key=[str(row.rank),row.player_name,str(row.player_id),f'{metrics.pressure_matches:.0f} / {metrics.pressure_legal:.0f}',
+                 f'{metrics.absolute:+.2f}',f'{metrics.uplift:+.2f}',f'{metrics.rating:+.2f}']
             assert (row.player_id,row.player_name) in pairs
-            assert [''.join(c.itertext()) for c in wr.findall('w:tc',NS)][:3]==key
+            assert [''.join(c.itertext()) for c in wr.findall('w:tc',NS)]==key
             assert '| '+' | '.join(key)+' |' in md
             assert re.search(r'^\s*'+r'\s+'.join(map(re.escape,key))+r'\s+',pages[i+1],re.M)
         checks[role]=ranked.player_id.tolist()
@@ -77,7 +83,7 @@ def main():
     for folder in ['pressure_pipeline','phase2_pipeline','phase3_pipeline','independent_audit','final_strategy','tests']:
         scripts.extend(sorted((root/folder).glob('*.py')))
     files=[*sorted(FINAL.glob('*.csv')),*sorted(FINAL.glob('*.md')),BASE.with_suffix('.pdf'),BASE.with_suffix('.docx')]
-    report=dict(ordered_official_ids=checks,document_pages=len(pages),source_hashes=manifest['source_sha256'],
+    report=dict(ordered_official_ids=checks,document_pages=len(pages),source_hashes=manifest['source_sha256'], independent_audit=release,
         pressure_events=len(pressure),performance_events=len(value),
         pytest=(E/'logs/tests.log').read_text().strip().splitlines()[-1],
         submission_files={p.name:digest(p) for p in files},

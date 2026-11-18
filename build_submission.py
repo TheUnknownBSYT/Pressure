@@ -19,6 +19,7 @@ STAGES = {
     'response': 'final_strategy.response_model',
     'ratings': 'final_strategy.ratings',
     'transfer': 'final_strategy.transfer',
+    'audit': 'final_strategy.release_audit',
     'publication': 'final_strategy.publication',
     'documents': None,
     'verification': None,
@@ -88,13 +89,16 @@ def main():
         elif stage=='documents':
             run([args.document_python,'-m','final_strategy.render'],logs/'word.log',env,work)
             base=work/FINAL/'SupeRR_Selector_Final_Methodology.docx'
-            with tempfile.TemporaryDirectory() as profile:
+            with tempfile.TemporaryDirectory(dir=base.parent) as staging:
+                profile = Path(staging)/'profile'
                 run([args.soffice,'-env:UserInstallation='+Path(profile).as_uri(),'--headless',
-                     '--convert-to','pdf','--outdir',str(base.parent),str(base)],logs/'pdf.log',env,work)
-                if not base.with_suffix('.pdf').exists():
-                    raise RuntimeError('No PDF was produced')
+                     '--convert-to','pdf','--outdir',staging,str(base)],logs/'pdf.log',env,work)
+                fresh = Path(staging)/base.with_suffix('.pdf').name
+                if not fresh.is_file() or not fresh.stat().st_size:
+                    raise RuntimeError('No fresh PDF was produced')
+                fresh.replace(base.with_suffix('.pdf'))
         else:
-            run([sys.executable,'-m','pytest','-q',str(ROOT/'tests')],logs/'tests.log',env,work)
+            run([sys.executable,'-m','pytest','-q','-rs',str(ROOT/'tests')],logs/'tests.log',env,work)
             run([sys.executable,'-m','final_strategy.verify_publication'],logs/'verification.log',env,work)
     print('Completed through',args.through, 'in',work)
 
