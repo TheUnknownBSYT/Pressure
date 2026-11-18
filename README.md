@@ -48,3 +48,9 @@ If the original response and pressure artifacts already exist locally, start at 
 The [report](submission/SupeRR_Selector_Final_Methodology.md) gives the approved formula, all ranks and IDs, the chronological validation and the separate auction screen. The [PDF](submission/SupeRR_Selector_Final_Methodology.pdf) is the upload copy. Availability was checked on 18 November 2026. Refresh it against the official auction list before bidding.
 
 The underlying pressure and response implementations are unchanged. The supplementary files under `submission/evidence/` document the previous release and use its eligibility rule where applicable.
+
+## 2027 auction filter
+
+Run `python -m final_strategy.round_one --auction-filter` with the same local inputs to regenerate the [filtered 2027 rankings](submission/auction_2027_filtered_rankings.csv). The filter uses official player IDs matched to the Pakistan national team in the supplied mapping. It removes those entries after scoring, then renumbers each role in its existing order. The CSV includes the historical rank for comparison.
+
+Abrar Ahmed and Shaheen Afridi are the two eligible entries excluded. Mohammed Siraj and Matheesha Pathirana enter the filtered bowling top ten. The entire filtered pool includes retained players and players with unverified availability. The [RR shortlist in the report](submission/SupeRR_Selector_Final_Methodology.md#rr-auction-shortlist--18-november-2026) lists four officially released candidates. Their 2027 registration remains unverified.

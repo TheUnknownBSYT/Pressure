@@ -54,3 +54,18 @@ def test_strict_weighted_majority():
     frame.loc[frame.high.eq(1) & frame.match_id.eq(1), "legal"] = 3
     above, _ = evaluate_sample(frame, frame.date.max(), draws=100)
     assert above.loc[101, "eligible"]
+
+
+def test_auction_filter_preserves_historical_ratings_and_reranks_each_role():
+    from final_strategy.round_one import auction_order
+
+    pool = pd.DataFrame({"player_id": [12, 13, 14, 15],
+                         "role": ["bat", "bat", "bowl", "bowl"],
+                         "rank": [1, 2, 1, 2],
+                         "rating": [3., 2., 4., 1.]})
+    filtered = auction_order(pool, [12])
+    assert list(filtered.player_id) == [13, 14, 15]
+    assert list(filtered["rank"]) == [1, 1, 2]
+    assert list(filtered.historical_rank) == [2, 1, 2]
+    assert list(filtered.rating) == [2., 4., 1.]
+    assert list(pool["rank"]) == [1, 2, 1, 2]

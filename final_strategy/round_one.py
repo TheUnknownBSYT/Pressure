@@ -1,4 +1,5 @@
 """Export approved rankings from locally held pressure labels and response predictions."""
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -7,11 +8,24 @@ from final_strategy.ratings import ROLE_LABEL, evaluate_sample, load_events, mat
 from phase2_pipeline.core import identities
 
 
+def auction_order(pool, pakistan_ids):
+    """Preserve historical scores and rerank the remaining players within each role."""
+    ordered = pool.loc[~pool.player_id.isin(pakistan_ids)].copy()
+    ordered["historical_rank"] = ordered["rank"]
+    ordered["rank"] = ordered.groupby("role", sort=False).cumcount() + 1
+    return ordered
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--auction-filter", action="store_true",
+                        help="Also export an auction view excluding Pakistan internationals")
+    args = parser.parse_args()
     data = load_events()
     names = identities(Path("."))[0].set_index("player_id").player_name
     end = pd.to_datetime(pd.read_csv("matches.csv", usecols=["match_date"]).match_date).max()
     selected = []
+    pools = []
     output = Path("submission")
     output.mkdir(exist_ok=True)
     for role, label in ROLE_LABEL.items():
@@ -25,12 +39,21 @@ def main():
         for col in ["rank", "pressure_matches", "pressure_legal"]:
             pool[col] = pool[col].astype(int)
         pool.to_csv(Path("outputs") / f"auction_pool_{role}.csv", index=False)
+        pools.append(pool)
         top = pool.head(10)
         top[["rank", "player_name", "player_id"]].to_csv(output/f"final_{label}_top10.csv", index=False)
         selected.append(top)
     columns = ["role", "rank", "player_name", "player_id", "rating", "pressure_matches",
                "pressure_legal", "weighted_success_pct", "uplift"]
     pd.concat(selected)[columns].to_csv(output/"round_one_rankings.csv", index=False)
+    if args.auction_filter:
+        mapping = pd.read_csv("competition_team_player_mapping.csv",
+                              usecols=["team_name", "player_id"])
+        pakistan_ids = mapping.loc[mapping.team_name.str.strip().eq("Pakistan"), "player_id"]
+        filtered = auction_order(pd.concat(pools), pakistan_ids)
+        filtered[["historical_rank", *columns]].to_csv(
+            output/"auction_2027_filtered_rankings.csv", index=False
+        )
 
 
 if __name__ == "__main__":
