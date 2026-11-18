@@ -1,0 +1,13 @@
+/.venv/
+/outputs/
+/tmp/
+/ball_by_ball.csv
+/matches.csv
+/playing_eleven.csv
+/competition_team_player_mapping.csv
+/teams.csv
+/competitions.csv
+/*.pdf
+__pycache__/
+.pytest_cache/
+.DS_Store
