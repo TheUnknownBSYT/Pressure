@@ -47,4 +47,4 @@ If the original response and pressure artifacts already exist locally, start at 
 
 The [report](submission/SupeRR_Selector_Final_Methodology.md) gives the approved formula, all ranks and IDs, the chronological validation and the separate auction screen. The [PDF](submission/SupeRR_Selector_Final_Methodology.pdf) is the upload copy. Availability was checked on 18 November 2026. Refresh it against the official auction list before bidding.
 
-The underlying pressure and response implementations are unchanged. The supplementary files under `submission/evidence/` document the previous release and use its eligibility rule where applicable.
+The underlying pressure and response implementations are unchanged. Keep the archived evidence under `submission/evidence/` in your local copy.

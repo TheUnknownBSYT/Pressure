@@ -1,9 +1,0 @@
-role,rule,candidates,returned,overlap_top10,names_in_order
-bat,point gates,18,10,10,Ishan Kishan | Glenn Phillips | Ravindra Jadeja | Rahul Tewatia | Andre Russell | Cameron Green | Azmatullah Omarzai | Shreyas Iyer | Rinku Singh | Virat Kohli
-bat,majority above own ordinary,17,10,9,Ishan Kishan | Glenn Phillips | Ravindra Jadeja | Andre Russell | Cameron Green | Azmatullah Omarzai | Shreyas Iyer | Rinku Singh | Virat Kohli | George Dockrell
-bat,one-sided 80% lower limits positive,5,5,5,Ishan Kishan | Glenn Phillips | Ravindra Jadeja | Cameron Green | Virat Kohli
-bat,two-sided 95% lower limits positive,0,0,0,
-bowl,point gates,25,10,10,Jasprit Bumrah | Abrar Ahmed | Shaheen Afridi | Sunil Narine | Mujeeb Ur Rahman | Jimmy Neesham | Axar Patel | Blessing Muzarabani | Mohammad Nawaz | Taskin Ahmed
-bowl,majority above own ordinary,22,10,8,Jasprit Bumrah | Abrar Ahmed | Shaheen Afridi | Sunil Narine | Mujeeb Ur Rahman | Axar Patel | Blessing Muzarabani | Taskin Ahmed | Kuldeep Yadav | Jason Holder
-bowl,one-sided 80% lower limits positive,11,10,8,Jasprit Bumrah | Abrar Ahmed | Shaheen Afridi | Sunil Narine | Mujeeb Ur Rahman | Blessing Muzarabani | Mohammad Nawaz | Taskin Ahmed | Jason Holder | Mohammed Siraj
-bowl,two-sided 95% lower limits positive,2,2,2,Jasprit Bumrah | Abrar Ahmed
