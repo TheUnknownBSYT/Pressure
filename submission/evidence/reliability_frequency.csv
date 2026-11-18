@@ -1,7 +1,0 @@
-role,method,overlap_top10,names_in_order
-bat,primary conservative average,10,Ishan Kishan | Glenn Phillips | Ravindra Jadeja | Rahul Tewatia | Andre Russell | Cameron Green | Azmatullah Omarzai | Shreyas Iyer | Rinku Singh | Virat Kohli
-bat,weighted share above own,6,Ravindra Jadeja | Virat Kohli | Ishan Kishan | Azmatullah Omarzai | Andre Russell | Venkatesh Iyer | Shimron Hetmyer | Prabhsimran Singh | George Dockrell | Shreyas Iyer
-bat,weighted share above both,7,Ravindra Jadeja | Virat Kohli | Ishan Kishan | Azmatullah Omarzai | Venkatesh Iyer | Andre Russell | Prabhsimran Singh | George Dockrell | Shreyas Iyer | Cameron Green
-bowl,primary conservative average,10,Jasprit Bumrah | Abrar Ahmed | Shaheen Afridi | Sunil Narine | Mujeeb Ur Rahman | Jimmy Neesham | Axar Patel | Blessing Muzarabani | Mohammad Nawaz | Taskin Ahmed
-bowl,weighted share above own,6,Abrar Ahmed | Blessing Muzarabani | Mujeeb Ur Rahman | Tanzim Sakib | Taskin Ahmed | Shaheen Afridi | Jason Holder | Jasprit Bumrah | Naveen ul Haq | Mohammed Siraj
-bowl,weighted share above both,6,Abrar Ahmed | Mujeeb Ur Rahman | Shaheen Afridi | Jasprit Bumrah | Naveen ul Haq | Blessing Muzarabani | Matheesha Pathirana | Tanzim Sakib | Jason Holder | Sunil Narine

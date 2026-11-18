@@ -8,4 +8,4 @@ Upload [SupeRR_Selector_Final_Methodology.pdf](SupeRR_Selector_Final_Methodology
 
 The CSVs give the exact dataset spelling and player ID. If Unstop displays a variant of a name, use the CSV and methodology as the reference for the intended player.
 
-The [compact ranking CSV](round_one_rankings.csv) includes pressure samples, weighted success, conservative scores and uplift. The methodology includes the separate auction shortlist and official availability sources. The evidence directory is the archived pre-majority release.
+The [compact ranking CSV](round_one_rankings.csv) includes pressure samples, weighted success, conservative scores and uplift. The methodology includes the separate auction shortlist and official availability sources.
