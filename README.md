@@ -2,6 +2,10 @@
 
 I built this project for SupeRR Selector to answer two questions. When could the next ball meaningfully change a T20 match? And which players performed above both the standard for that situation and their own usual standard?
 
+- [Methodology PDF](submission/SupeRR_Selector_Final_Methodology.pdf)
+- [Batting order](submission/final_batters_top10.csv) and [bowling order](submission/final_bowlers_top10.csv)
+- [Submission instructions and evidence](submission/README.md)
+
 ## How I measure pressure
 
 1. **Rebuild the match one ball at a time.** Before each delivery I reconstruct the score, wickets, balls remaining and chase target. Wides and no-balls affect the score without using up a legal ball. The rebuild checks the match records for inconsistencies before using them.
@@ -42,7 +46,7 @@ For the full local publishing workflow, install LibreOffice and Poppler and make
 
 ```bash
 python -m pip install -r requirements-documents.txt
-python build_submission.py --from-stage publication
+python build_submission.py --from-stage audit
 ```
 
 ## Where the implementation lives
@@ -58,9 +62,6 @@ python build_submission.py --from-stage publication
 
 The supplied fixtures span **22 January 2022 to 1 November 2026**. Raw files record 200,999 deliveries, with 113,031 receiving a pressure score.
 
-- [Methodology PDF](submission/SupeRR_Selector_Final_Methodology.pdf)
-- [Batting order](submission/final_batters_top10.csv) and [bowling order](submission/final_bowlers_top10.csv)
-- [Submission instructions and evidence](submission/README.md)
 
 ```text
 Competition files

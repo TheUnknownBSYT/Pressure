@@ -1,0 +1,60 @@
+{
+  "ordered_official_ids": {
+    "bat": [
+      4117,
+      4853,
+      152,
+      3926,
+      1318,
+      5939,
+      6676,
+      3647,
+      4708,
+      47
+    ],
+    "bowl": [
+      2933,
+      5979,
+      6355,
+      781,
+      6450,
+      3323,
+      2876,
+      6523,
+      2490,
+      2681
+    ]
+  },
+  "document_pages": 10,
+  "source_hashes": {
+    "ball_by_ball": "01e2b4379edfbab6a6e456d304cb3c70f554cb312ef93d9588f3f32a82cb396e",
+    "matches": "bb100ab84b8b9a15160c1f2315cf675210131a30e779ec5079fd5403dcf56eef",
+    "playing_eleven": "7517c73722a28d5d61c808ccf0cbed315a8780586d02e946eb9a7f5daf011c27",
+    "competition_team_player_mapping": "1ded4e42a933618572d6e2c3a521c3257eb1844fab4456d567d77cbb2d3bbb12",
+    "teams": "a65e5922a9b3bf49247b24fc9471782e700efb31f8dcc5042923238b87c50a5d",
+    "competitions": "507ceb7189f972d4e4f299ddcfc97f3c3247af1913f6291106f161fa8353fd9b"
+  },
+  "independent_audit": {
+    "raw_delivery_rows_reconciled": 200999,
+    "scored_pressure_rows_reconciled": 113031,
+    "response_rows_reconciled": 113017,
+    "player_role_records_checked": 1195,
+    "first_fixture_date": "2022-01-22",
+    "last_fixture_date": "2026-11-01",
+    "checks": [
+      "Raw score, wicket and legal-ball ledger",
+      "Strictly earlier training and pressure cutoffs",
+      "Static and dynamic pressure equations",
+      "Runs and wickets attribution, forecasts and response value",
+      "Matched cells, eligibility, frequency, independent bootstrap and rank order"
+    ]
+  },
+  "pytest": "63 passed, 5 skipped in 12.98s",
+  "implementation_revision": "e13c2af81cfc33690ade27dc894840a6fc7247b0",
+  "submission_sha256": {
+    "SupeRR_Selector_Final_Methodology.md": "600164017691a6ec252d80f64f1ef05aedad19c898a621a7a21dd8d185705ee4",
+    "SupeRR_Selector_Final_Methodology.pdf": "5c854e0fb98f0139da3324d582febec374b3819693d68028605ce114ddd5c208",
+    "final_batters_top10.csv": "e3de98bad074873e0b270ad313f2d29384dd4005db709966566dcb13f4df3eba",
+    "final_bowlers_top10.csv": "492a7d0c76b1198e97b0a526d9ec979b52afcf2c6a721c64d6c1426833532c10"
+  }
+}
