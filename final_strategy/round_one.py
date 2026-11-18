@@ -19,8 +19,12 @@ def auction_order(pool, pakistan_ids):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--auction-filter", action="store_true",
-                        help="Also export an auction view excluding Pakistan internationals")
+                        help="Screen existing eligible pool files against official 2027 availability")
     args = parser.parse_args()
+    if args.auction_filter:
+        from final_strategy.auction_2027 import run
+        run()
+        return
     data = load_events()
     names = identities(Path("."))[0].set_index("player_id").player_name
     end = pd.to_datetime(pd.read_csv("matches.csv", usecols=["match_date"]).match_date).max()
@@ -46,14 +50,6 @@ def main():
     columns = ["role", "rank", "player_name", "player_id", "rating", "pressure_matches",
                "pressure_legal", "weighted_success_pct", "uplift"]
     pd.concat(selected)[columns].to_csv(output/"round_one_rankings.csv", index=False)
-    if args.auction_filter:
-        mapping = pd.read_csv("competition_team_player_mapping.csv",
-                              usecols=["team_name", "player_id"])
-        pakistan_ids = mapping.loc[mapping.team_name.str.strip().eq("Pakistan"), "player_id"]
-        filtered = auction_order(pd.concat(pools), pakistan_ids)
-        filtered[["historical_rank", *columns]].to_csv(
-            output/"auction_2027_filtered_rankings.csv", index=False
-        )
 
 
 if __name__ == "__main__":
