@@ -1,4 +1,21 @@
-# Pressure
+# Pressure Studio
+
+Start here to review the full project. The pipeline turns T20 deliveries into pressure ratings, ranks players using the Round 1 reliability rules, and screens the ranked pool against documented auction availability.
+
+## Where to inspect the project
+
+- [Model and rankings](final_strategy/ratings.py)
+- [Dashboard interface](dashboard/template.html) and [local dashboard builder](dashboard/build.py)
+- [Final rankings, auction shortlist, and methodology](submission/final_results_for_report.md)
+- [Independent model audit code](factor_audit/) and [tests](tests/)
+
+## Run the dashboard locally
+
+If you have the existing local ratings outputs, run `python3 dashboard/build.py` and open the generated **Pressure Dashboard.html** in your browser. The dashboard supports player search, batting and bowling views, a reliability filter, and scenario weights. The HTML embeds local player ratings so it works offline.
+
+To generate the ratings from the original files, install the dependencies in `requirements.txt`, place the authorized source files in the repository root, and run `python build_submission.py --through ratings`. Then run the dashboard build command above. Keep the inputs, generated evidence, full player exports, and populated dashboard in your local workspace.
+
+## Model and submission notes
 
 I built this project for SupeRR Selector to answer two questions. When could the next ball meaningfully change a T20 match? And which players performed above both the standard for that situation and their own usual standard?
 
