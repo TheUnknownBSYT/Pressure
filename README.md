@@ -9,11 +9,13 @@ Start here to review the full project. The pipeline turns T20 deliveries into pr
 - [Final rankings, auction shortlist, and methodology](submission/final_results_for_report.md)
 - [Independent model audit code](factor_audit/) and [tests](tests/)
 
-## Run the dashboard locally
+## Try the portfolio demo
 
-If you have the existing local ratings outputs, run `python3 dashboard/build.py` and open the generated **Pressure Dashboard.html** in your browser. The dashboard supports player search, batting and bowling views, a reliability filter, and scenario weights. The HTML embeds local player ratings so it works offline.
+From a checkout of this branch run `python3 dashboard/build.py --demo`, then open **Pressure Demo.html**. This offline example uses five explicitly fictional players and needs only Python’s standard library. Run the view tests with `node --test dashboard/ranking.test.cjs` (Node 18+).
 
-To generate the ratings from the original files, install the dependencies in `requirements.txt`, place the authorized source files in the repository root, and run `python build_submission.py --through ratings`. Then run the dashboard build command above. Keep the inputs, generated evidence, full player exports, and populated dashboard in your local workspace.
+## Which ranking is official?
+
+The approved Round 1 model is on `project-review`; the older `main` snapshot lacks the strict majority-success condition. The official view reads the eligibility and rank saved by the approved model. Its builder checks ranks, names and IDs against both submission CSVs. Explore all scored players to see qualified players first, followed by unranked players. Experimental mode lets you change the uplift weight and success threshold. Auction availability is a separate, dated report. Historical experiments live under `factor_audit/` and are outside the dashboard build.
 
 ## Model and submission notes
 
@@ -58,19 +60,13 @@ python -m final_strategy.round_one
 python -m pytest -q
 ```
 
-If the original response and pressure artifacts already exist locally, start at the second command. The exporter recomputes both complete pools, checks names against official IDs, and writes the two dropdown lists and the compact [20-player CSV](submission/round_one_rankings.csv). Private full-pool diagnostics stay under ignored `outputs/`.
+With existing response and pressure artifacts, run `python -m final_strategy.round_one` directly. Then run `python dashboard/build.py` and open **Pressure Dashboard.html**. The builder reads the private scored-player snapshot under `outputs/round_one_scored.csv`. The exporter recomputes both complete pools, checks names against official IDs, and writes the two dropdown lists and the compact [20-player CSV](submission/round_one_rankings.csv). Private full-pool diagnostics stay under ignored `outputs/`.
 
 ## Round 1 submission
 
 The [report](submission/SupeRR_Selector_Final_Methodology.md) gives the approved formula, all ranks and IDs, the chronological validation and the separate auction screen. The [PDF](submission/SupeRR_Selector_Final_Methodology.pdf) is the upload copy. Availability was checked on 18 November 2026. Refresh it against the official auction list before bidding.
 
 The underlying pressure and response implementations are unchanged. Keep the archived evidence under `submission/evidence/` in your local copy.
-
-## 2027 auction filter
-
-Run `python -m final_strategy.round_one --auction-filter` with the same local inputs to regenerate the [filtered 2027 rankings](submission/auction_2027_filtered_rankings.csv). The filter uses official player IDs matched to the Pakistan national team in the supplied mapping. It removes those entries after scoring, then renumbers each role in its existing order. The CSV includes the historical rank for comparison.
-
-Abrar Ahmed and Shaheen Afridi are the two eligible entries excluded. Mohammed Siraj and Matheesha Pathirana enter the filtered bowling top ten. The entire filtered pool includes retained players and players with unverified availability. The [RR shortlist in the report](submission/SupeRR_Selector_Final_Methodology.md#rr-auction-shortlist--18-november-2026) lists four officially released candidates. Their 2027 registration remains unverified.
 
 ## Verified auction availability
 

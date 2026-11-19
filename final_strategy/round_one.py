@@ -29,12 +29,15 @@ def main():
     names = identities(Path("."))[0].set_index("player_id").player_name
     end = pd.to_datetime(pd.read_csv("matches.csv", usecols=["match_date"]).match_date).max()
     selected = []
-    pools = []
+    scored = []
     output = Path("submission")
     output.mkdir(exist_ok=True)
     for role, label in ROLE_LABEL.items():
         groups = matched_groups(data, role)
         scores, _ = evaluate_sample(groups, end)
+        scores["player_name"] = names.reindex(scores.index)
+        scores["role"] = role
+        scored.append(scores[scores.rating.notna()].reset_index())
         pool = scores.loc[scores.eligible].sort_values("rank").reset_index()
         pool["player_name"] = names.loc[pool.player_id].to_numpy()
         pool["role"] = role
@@ -43,12 +46,12 @@ def main():
         for col in ["rank", "pressure_matches", "pressure_legal"]:
             pool[col] = pool[col].astype(int)
         pool.to_csv(Path("outputs") / f"auction_pool_{role}.csv", index=False)
-        pools.append(pool)
         top = pool.head(10)
         top[["rank", "player_name", "player_id"]].to_csv(output/f"final_{label}_top10.csv", index=False)
         selected.append(top)
     columns = ["role", "rank", "player_name", "player_id", "rating", "pressure_matches",
                "pressure_legal", "weighted_success_pct", "uplift"]
+    pd.concat(scored).to_csv(Path("outputs")/"round_one_scored.csv", index=False)
     pd.concat(selected)[columns].to_csv(output/"round_one_rankings.csv", index=False)
 
 
