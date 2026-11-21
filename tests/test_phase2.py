@@ -55,6 +55,9 @@ def test_real_forward_predictions_and_pressure_reproduction():
     assert a.loc[a.dismissal_type.eq('RunOut'),'bowl_wicket'].eq(0).all()
 
 def test_real_identity_map_unique():
+    if not Path("competition_team_player_mapping.csv").exists():
+        import pytest
+        pytest.skip("Requires the proprietary competition identity mapping")
     names,aliases=identities(Path('.'));assert names.player_id.is_unique
     assert names.player_name.notna().all()
 
